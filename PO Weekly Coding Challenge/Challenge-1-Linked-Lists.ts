@@ -5,44 +5,70 @@ interface LLNode{
 }
 
 interface LLMethods{
-    insert(value: LLNode): void
-    traverse(): void
-    getValue(): LLNode
+    NodeAdd(value: any): void
+    NodesPrint(): void
 }
 
-class LLConstructor implements LLMethods{
-    //private LL: LLNode[] 
-    private head: LLNode
-    private currentNode: LLNode 
+class LLConstructor implements LLMethods{ 
+    private head: LLNode | null
+    private nodeCurrent: LLNode | null
+    private length: number
 
     constructor(){
-        //this.LL = []
-        this.head = this.currentNode = null
+        this.head = this.nodeCurrent = null
+        this.length = 0
     }
 
-    insert(value){
+    NodeAdd(value: any){
+        const node = {value:value,next:null}
         
-        //if the head is empty (no LL yet)
+        //if the head is empty (no LL yet). !Only applies to first insert iteration!
         if (!this.head){
-            this.head.value = value
-            this.head.next = this.currentNode
+            this.head = node 
+            console.log("head initialized to: ", this.head)
         }
+        
         //else the head already has values so...
-        else{
-            //this.currentNode.next = {value:value, next:null} 
-            this.currentNode = {value:value, next:null}
+        else{ 
+
+            //make the current node the head node. !Applies to all but first iteration!
+            this.nodeCurrent = this.head
+            console.log("nodeCurrent assigned to head, head is: ", this.head)
+            
+            //while the current node has an object for its next property.
+            // !Applies to all iterations except first and second!
+            while (this.nodeCurrent.next){
+                console.log("while loop started")
+                //assign it to that object
+                this.nodeCurrent = this.nodeCurrent.next
+            }
+
+            //make next another node object with both the value and next property
+            console.log("The nodeCurrent is now:", this.nodeCurrent, "its next property will be changed to: ", node, '\n')
+            this.nodeCurrent.next = node
         }
+
+        this.length++
 
     }
 
-    traverse(): void {
-        
+    NodesPrint(): void {
+        let nodeCurrent = this.head
+        while (nodeCurrent){
+            console.log(nodeCurrent.value)
+            nodeCurrent = nodeCurrent.next
+        }
     }
 }
 
 
 
-let Node1: LLNode = {value:1, next: null}
+let LLone: LLMethods = new LLConstructor
+LLone.NodeAdd(1)
+LLone.NodeAdd(2)
+LLone.NodeAdd(3)
+LLone.NodeAdd(4)
+LLone.NodesPrint()
 
 
 
